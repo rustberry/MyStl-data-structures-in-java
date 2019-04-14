@@ -9,16 +9,16 @@ import MyStl.*;
 
 public class TreeTraverse<Item extends Comparable<? super Item>> {
     public static void main(String[] args) {
-        TreeTraverse.BinarySearchTreeTest();
-        // TreeTraverse.RBTreeTest();
+        // TreeTraverse.BinarySearchTreeTest();
+        TreeTraverse.RBTreeTest();
     }
 
 
     public static void BinarySearchTreeTest() {
         List<String> al = new ArrayList<>(Arrays.asList("S", "E", "A", "R", "C", "H", "X", "Z", "T"));
         BinarySearchTree<String> t = new BinarySearchTree<>(al);
-        BinarySearchTree.TreeNode<String> root = t.getRoot();
-        System.out.println("root.val is: " + root.val);
+        BinaryNodeInterface<String> root = t.getRoot();
+        System.out.println("root.val is: " + root.getKey());
 
         TreeTraverse<String> travs = new TreeTraverse<>();
         System.out.println("Now in-order recursively");
@@ -33,9 +33,9 @@ public class TreeTraverse<Item extends Comparable<? super Item>> {
     public static void RBTreeTest() {
         List<String> al = new ArrayList<>(Arrays.asList("S", "E", "A", "R", "C", "H", "X", "Z", "T"));
         RedBlackTree<String> t = new RedBlackTree<>(al);
-        RedBlackTree.RBNode<String> root = t.getRoot();
-        System.out.println("RBTreeTest: root.val is: " + root.val);
-        System.out.println("root.left.val " + root.left.val + " root.left.color");
+        BinaryNodeInterface<String> root = t.getRoot();
+        System.out.println("RBTreeTest: root.val is: " + root.getKey());
+        System.out.println("root.left.val " + root.getLeftChild().getKey() + " root.left.color");
 
         TreeTraverse<String> travs = new TreeTraverse<>();
         System.out.println("Now in-order recursively");
@@ -49,32 +49,32 @@ public class TreeTraverse<Item extends Comparable<? super Item>> {
 
 
 
-    public void inOrderTraverseRecur(BinarySearchTree.TreeNode<Item> root) {
+    public void inOrderTraverseRecur(BinaryNodeInterface<Item> root) {
         if (root == null) {
             return;
         }
 
-        inOrderTraverseRecur(root.left);
+        inOrderTraverseRecur(root.getLeftChild());
 
-        System.out.println(root.val);
+        System.out.println(root.getKey());
 
-        inOrderTraverseRecur(root.right);
+        inOrderTraverseRecur(root.getRightChild());
     }
 
-    public void inOrderTraverseIter(BinarySearchTree.TreeNode<Item> root) {
-        BinarySearchTree.TreeNode<Item> cur = root;
-        // BinarySearchTree.TreeNode<Item> pre = null;
-        Stack<BinarySearchTree.TreeNode<Item>> tStack = new Stack<>();
+    public void inOrderTraverseIter(BinaryNodeInterface<Item> root) {
+        BinaryNodeInterface<Item> cur = root;
+        // TreeNode<Item> pre = null;
+        Stack<BinaryNodeInterface<Item>> tStack = new Stack<>();
         while (cur != null || !tStack.isEmpty()) {
             if (cur != null) {
                 tStack.push(cur);
-                cur = cur.left;
+                cur = cur.getLeftChild();
             } else {
                 cur = tStack.pop();
                 // process the node
-                System.out.println(cur.val);
+                System.out.println(cur.getKey());
 
-                cur = cur.right;
+                cur = cur.getRightChild();
             }
         }
     }

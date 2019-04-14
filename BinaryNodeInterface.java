@@ -30,4 +30,12 @@ interface BinaryNodeInterface<Key> {
      */
     public boolean hasRight();
 
+    public BinaryNodeInterface<Key> getLeftChild();
+
+    public BinaryNodeInterface<Key> getRightChild();
+
+    public void setLeftChild(BinaryNodeInterface<Key> leftChild);
+
+    public void setRightChild(BinaryNodeInterface<Key> rightChild);
+
 }

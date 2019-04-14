@@ -6,39 +6,7 @@ import java.util.List;
 
 
 public class BinarySearchTree <Item extends Comparable<? super Item>> implements MyTreeInterface<Item> {
-    private TreeNode<Item> root;
-
-    public static class TreeNode<Value extends Comparable<? super Value>> implements BinaryNodeInterface<Value> {
-        Value val;
-        TreeNode<Value> left;
-        TreeNode<Value> right;
-
-        public Value getKey() {
-            return this.val;
-        }
-
-        public void setKey(Value newData) {
-            this.val = newData;
-        }
-
-        public boolean hasLeft() {
-            return this.left != null;
-        }
-
-        public boolean hasRight() {
-            return this.right != null;
-        }
-
-        TreeNode() {}
-        
-        TreeNode(Value x) { 
-            val = x;
-            // String cls = this.getClass().getName();
-            // System.out.println(cls + " this.val is: " + this.val);
-        }
-        // Todo: solved "The type parameter Item is hiding the type Item"
-        // by replacing Item with Value in the declaration of inner class TreeNode
-    }
+    private BinaryNodeInterface<Item> root;
 
     BinarySearchTree() {
         // assert false : "BinarySearchTree no-arg init invoked"; 
@@ -66,41 +34,42 @@ public class BinarySearchTree <Item extends Comparable<? super Item>> implements
         return root != null;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println("test main");
-    }
-
-    public TreeNode<Item> getRoot() {
+    public BinaryNodeInterface<Item> getRoot() {
         return root;
     }
 
-    private TreeNode<Item> insertByRootNode(TreeNode<Item> root, Item i) {
-        TreeNode<Item> x = new TreeNode<>(i);
+    public static void main(String[] args) {
+        BinarySearchTree<String> bst = new BinarySearchTree<>();
+        System.out.println("test main");
+    }
+
+
+    private BinaryNodeInterface<Item> insertByRootNode(BinaryNodeInterface<Item> root, Item i) {
+        BinaryNodeInterface<Item> x = new TreeNode<>(i);
         if (root == null) {
             root = x;
             // System.out.println("BinarySearchTree.insert:\troot.val is: " + root.val);
             
             return root;
         }
-        TreeNode<Item> walker = root;
-        TreeNode<Item> pre = null;
+        BinaryNodeInterface<Item> walker = root;
+        BinaryNodeInterface<Item> pre = null;
         while (walker != null) {
             pre = walker;
 
-            if (i.compareTo(walker.val) < 0) {
-                walker = walker.left;
+            if (i.compareTo(walker.getKey()) < 0) {
+                walker = walker.getLeftChild();
             } else {
-                walker = walker.right;
+                walker = walker.getRightChild();
             }
         }
 
         // System.out.println("BinarySearchTree.insert:\tpre.val: " + pre.val +
         //                     " Item i: " + i);
-        if (i.compareTo(pre.val) < 0) {
-            pre.left = x;
+        if (i.compareTo(pre.getKey()) < 0) {
+            pre.setLeftChild(x);
         } else {
-            pre.right = x;
+            pre.setRightChild(x);
         }
 
         return root;

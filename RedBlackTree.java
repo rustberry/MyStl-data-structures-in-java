@@ -12,7 +12,7 @@ public class RedBlackTree <Item extends Comparable<? super Item>>
     private static final boolean BLACK = false;
 
     static class RBNode<Value extends Comparable<? super Value>> 
-                    extends BinarySearchTree.TreeNode<Value> implements BinaryNodeInterface<Value> {
+                    extends TreeNode<Value> implements BinaryNodeInterface<Value> {
         Value val;
         boolean color;
         RBNode<Value> left;
@@ -31,16 +31,24 @@ public class RedBlackTree <Item extends Comparable<? super Item>>
             return this.val;
         }
 
-        public void setKey(Value newData) {
-            this.val = newData;
-        }
+        // public void setKey(Value newData) {
+        //     this.val = newData;
+        // }
 
-        public boolean hasLeft() {
-            return this.left != null;
-        }
+        // public boolean hasLeft() {
+        //     return this.left != null;
+        // }
 
-        public boolean hasRight() {
-            return this.right != null;
+        // public boolean hasRight() {
+        //     return this.right != null;
+        // }
+
+        public BinaryNodeInterface<Value> getLeftChild() {
+            return (BinaryNodeInterface<Value>) this.left;
+        }
+    
+        public BinaryNodeInterface<Value> getRightChild() {
+            return (BinaryNodeInterface<Value>) this.right;
         }
 
         private boolean isRed(RBNode<Value> node) {
@@ -48,6 +56,14 @@ public class RedBlackTree <Item extends Comparable<? super Item>>
                 return false;
             }
             return node.color == RED;
+        }
+
+        private boolean getColor() {
+            return this.color;
+        }
+
+        private void setColor(boolean color) {
+            this.color = color;
         }
     }
 
@@ -70,51 +86,15 @@ public class RedBlackTree <Item extends Comparable<? super Item>>
 
     public Item insert(Item i) {
         root = insertByRootNode(root, i);
-        root.color = BLACK;
-        System.out.println("root is now " + root.val);
+        root.setColor(BLACK);
+        System.out.println("root is now " + root.getKey());
         return i;
     }
 
-
-    public RBNode<Item> getRoot() {
-        return root;
+    @Override
+    public BinaryNodeInterface<Item> getRoot() {
+        return (BinaryNodeInterface<Item>) root;
     }
-
-/*
-    // the non-recursive version
-    private RBNode<Item> insertByRootNode_iter(RBNode<Item> h, Item i) {
-        RBNode<Item> x = new RBNode<>(i);
-        x.color = RED;
-        if (h == null) {
-            return x;
-        }
-        RBNode<Item> walker = h, pre = null;
-        while (walker != null) {
-            pre = walker;
-            int cmp = i.compareTo(walker.val);
-            if (cmp < 0) {
-                walker = walker.left;
-            } else if (cmp > 0) {
-                walker = walker.right;
-            } else {
-                walker.val = i;
-                return h;
-            }
-        }
-
-        int cmp = i.compareTo(pre.val);
-        if (cmp < 0) {
-            pre.left = x;
-            if (pre.right.color == RED) {
-                flipColors(pre);
-            }
-        } else{
-            pre.right = x;
-        }
-
-        return h;
-    }
-*/
 
 
     private RBNode<Item> insertByRootNode(RBNode<Item> h, Item i) {
@@ -146,6 +126,7 @@ public class RedBlackTree <Item extends Comparable<? super Item>>
         }
 
         return h;
+    
     }
 
     // precondition: two children are red, node is black
@@ -185,21 +166,21 @@ public class RedBlackTree <Item extends Comparable<? super Item>>
     public static void main(String [] args) {
         List<String> al = new ArrayList<>(Arrays.asList("S", "E", "A", "R", "C", "H", "X", "Z", "T"));
         RedBlackTree<String> t = new RedBlackTree<>(al);
-        RBNode<String> root = t.getRoot();
+        RBNode<String> root = (RBNode<String>) t.getRoot();
 
         System.out.println("\n\nRBTreeTest: root.val is: " + root.val + root.color);
-        System.out.println("RBTreeTest: root.left.val " + root.left.val + root.left.color);
+        System.out.println("RBTreeTest: root.left.getKey() " + root.left.getKey() + root.left.color);
 
         RBNode<String> walker = root;
         while (walker != null) {
-            System.out.println("walker.val: " + walker.val + " walker.color " + walker.color);
+            System.out.println("walker.getKey(): " + walker.getKey() + " walker.color " + walker.color);
             walker = walker.left;
         }
 
         walker = root;
         System.out.println("\n\n right search");
         while (walker != null) {
-            System.out.println("walker.val: " + walker.val + " walker.color " + walker.color);
+            System.out.println("walker.getKey(): " + walker.getKey() + " walker.color " + walker.color);
             walker = walker.right;
         }
     }
