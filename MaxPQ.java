@@ -1,8 +1,7 @@
 package MyStl;
 
-import java.util.*;
 
-public class MaxPQ<key extends Comparable<? super Key>> {
+public class MaxPQ<Key extends Comparable<? super Key>> {
     private Key[] pq;
     private int N = 0;
     
@@ -11,11 +10,11 @@ public class MaxPQ<key extends Comparable<? super Key>> {
     }
     
     public MaxPQ(int max) {
-        pq = new Key[max];
+        pq = (Key[]) new Comparable[max + 1];
     }
     
     public MaxPQ(Key[] a) {
-        pq = new Key[a.length];
+        pq = (Key[]) new Comparable[a.length + 1];
         for (Key k : a) {
             Insert(k);
         }
@@ -60,17 +59,21 @@ public class MaxPQ<key extends Comparable<? super Key>> {
         pq[j] = tmp;
     }
     
+    /**
+     * The swim operation in a max-oriented PQ, i.e. the bigger one gets to be swum up
+     * @param k  the index of the target key in PQ
+     */
     private void swim(int k) {
-        while (k / 2 >= 1) {
-            if (less((k / 2), k)) {
-                exch((k / 2), k);
-                k = k / 2;
-            } else {
-                break;
-            }
+        while (k > 1 && less((k / 2), k)) {
+            exch((k / 2), k);
+            k = k / 2;
         }
     }
     
+    /**
+     * The sink operation in a max-oriented PQ, i.e. the smaller one gets sunk down
+     * @param k
+     */
     private void sink(int k) {
         int j = 2 * k;
         while (j < N) {
