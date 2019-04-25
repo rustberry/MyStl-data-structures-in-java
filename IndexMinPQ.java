@@ -20,19 +20,19 @@ public class IndexMinPQ<Key extends Comparable<? super Key>> {
     }
 
     public void insert(int i, Key k) {
-        for (int j = 0; j < pq.length; j++) {
-            System.out.println("j is " + pq[j]);
-        }
-        System.out.println();
+        // for (int j = 0; j < pq.length; j++) {
+        //     System.out.println("j is " + pq[j]);
+        // }
+        // System.out.println();
 
         keys[i] = k;
         pq[++N] = i;
         qp[i] = N;
 
-        for (int j = 0; j < pq.length; j++) {
-            System.out.println("j is " + pq[j]);
-        }
-        System.out.println("i is "+ i + '\n');
+        // for (int j = 0; j < pq.length; j++) {
+        //     System.out.println("j is " + pq[j]);
+        // }
+        // System.out.println("i is "+ i + '\n');
 
         swim(N);
     }
@@ -64,12 +64,14 @@ public class IndexMinPQ<Key extends Comparable<? super Key>> {
         qp[i] = -1;
         // deletion in pq
         if (N - 1 > 0) {
-            pq[pqi] = pq[N];// pq[N] = j, keys[j] = key, qp[j] = N
-            qp[pq[N]] = pqi;
-            pq[N + 1] = -1;
+            pq[pqi] = pq[N];  // pq[N] = j, keys[j] = key, qp[j] = N
+            qp[pq[N]] = pqi;  // pq[N] is an index in `keys`, q[pq[N]] is where that index is stored in pq
+            pq[N] = -1;
+            N--;
             sink(pqi);
         } else {
             pq[1] = -1;
+            N--;
         }
     }
 
@@ -118,14 +120,19 @@ public class IndexMinPQ<Key extends Comparable<? super Key>> {
         }
     }
 
+    /**
+     * exchanges values in `pq`
+     * @param i the index in pq
+     * @param j the index in pq
+     */
     private void exch(int i, int j) {
-        int pqi = qp[i], pqj = qp[j];
+        int ki = pq[i], kj = pq[j];
         // exch index in pq
-        pq[pqi] = j;
-        pq[pqj] = i;
+        pq[i] = kj;
+        pq[j] = ki;
         
-        qp[i] = pqj;
-        qp[j] = pqi;
+        qp[ki] = j;
+        qp[kj] = i;
     }
 
     /**
@@ -145,8 +152,8 @@ public class IndexMinPQ<Key extends Comparable<? super Key>> {
     
     private void sink(int k) {
         int j = 2 * k;
-        while (j < N) {
-            if (less(j, (j + 1))) {
+        while (j <= N) {
+            if (j+1 <= N && less((j + 1), j)) {
                 j++;
             }
             if (less(j, k)) {

@@ -9,10 +9,12 @@ public class MaxPQ<Key extends Comparable<? super Key>> {
         this(16);
     }
     
+    @SuppressWarnings("unchecked")
     public MaxPQ(int max) {
         pq = (Key[]) new Comparable[max + 1];
     }
     
+    @SuppressWarnings("unchecked")
     public MaxPQ(Key[] a) {
         pq = (Key[]) new Comparable[a.length + 1];
         for (Key k : a) {
@@ -76,8 +78,8 @@ public class MaxPQ<Key extends Comparable<? super Key>> {
      */
     private void sink(int k) {
         int j = 2 * k;
-        while (j < N) {
-            if (less(j, (j + 1))) {
+        while (j <= N) {
+            if (j+1 <= N && less(j, (j + 1))) {
                 j++;
             }
             if (less(k, j)) {
